@@ -227,6 +227,7 @@
   <ItemGroup>
     <Compile Include="game\Artifact.cs" />
     <Compile Include="Properties\JsonUserSettingsProvider.cs" />
+    <Compile Include="scraping\ArtifactChecker.cs" />
     <Compile Include="scraping\ArtifactScraper.cs" />
     <Compile Include="game\Character.cs" />
     <Compile Include="data\DatabaseManager.cs" />

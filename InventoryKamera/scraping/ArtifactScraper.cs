@@ -146,8 +146,160 @@ namespace InventoryKamera
 				(rectangles, cols, rows) = GetPageOfItems(page);
 			}
 		}
+		
+		public static void LockArtifacts(Inventory inventory)
+		{
+			int artifactCount = inventory.Artifacts.Count;
+			int page = 0;
+			var (rectangles, cols, rows) = GetPageOfItems(page);
+			int fullPage = cols * rows;
+			int totalRows = (int)Math.Ceiling(artifactCount / (decimal)cols);
+			int artifactIndex = 0;
+			int rowsQueued = 0;
+			int offset = 0;
+			UserInterface.SetArtifact_Max(artifactCount);
 
-        private static string CurrentSortingMethod()
+			StopScanning = false;
+
+			Logger.Info("Found {0} for artifact count.", artifactCount);
+
+			SortByLevel = Properties.Settings.Default.MinimumArtifactLevel > 0;
+
+			if (SortByLevel)
+			{
+				Logger.Debug("Sorting by level to optimize total scan time");
+                // Check if sorted by level
+                // If not, sort by level
+                if (CurrentSortingMethod() != "level")
+                {
+					Logger.Debug("Not already sorting by level...");
+					Navigation.SetCursor(
+						X: (int)(230 / 1280.0 * Navigation.GetWidth()),
+						Y: (int)(680 / 720.0 * Navigation.GetHeight()));
+					Navigation.Click();
+					Navigation.Wait();
+					Navigation.SetCursor(
+						X: (int)(250 / 1280.0 * Navigation.GetWidth()),
+						Y: (int)(615 / 720.0 * Navigation.GetHeight()));
+					Navigation.Click();
+					Navigation.Wait();
+				}
+				Logger.Debug("Inventory is sorted by level.");
+			}
+			else
+            {
+				Logger.Debug("Sorting by quality to lock all artifacts matching quality filter.");
+				// Check if sorted by quality
+				if (CurrentSortingMethod() != "quality")
+				{
+					Logger.Debug("Not already sorting by quality...");
+					// If not, sort by quality
+					Navigation.SetCursor(
+						X: (int)(230 / 1280.0 * Navigation.GetWidth()),
+						Y: (int)(680 / 720.0 * Navigation.GetHeight()));
+					Navigation.Click();
+					Navigation.Wait();
+					Navigation.SetCursor(
+						X: (int)(250 / 1280.0 * Navigation.GetWidth()),
+						Y: (int)(645 / 720.0 * Navigation.GetHeight()));
+					Navigation.Click();
+					Navigation.Wait();
+				}
+				Logger.Debug("Inventory is sorted by quality");
+			}
+
+			// Go through artifact list
+			while (artifactIndex < artifactCount)
+			{
+				Logger.Debug("Scanning artifact page {0}", page);
+				Logger.Debug("Located {0} possible item locations on page.", rectangles.Count);
+
+				int cardsRemaining = artifactCount - artifactIndex;
+				// Go through each "page" of items and queue. In the event that not a full page of
+				// items are scrolled to, offset the index of rectangle to start clicking from
+				for (int i = cardsRemaining < fullPage ? ( rows - ( totalRows - rowsQueued ) ) * cols : 0; i < rectangles.Count; i++)
+				{
+					Rectangle item = rectangles[i];
+					Navigation.SetCursor(item.Center().X, item.Center().Y + offset);
+					Navigation.Click();
+					Navigation.SystemWait(Navigation.Speed.SelectNextInventoryItem);
+
+					bool shouldLock = true;
+					Artifact artifact = inventory.Artifacts[artifactIndex];
+					if (ArtifactChecker.IsTrashable(artifact, inventory.Artifacts))
+					{
+						shouldLock = false;
+					}
+					
+					if ((shouldLock && !artifact.Lock) || (!shouldLock && artifact.Lock))
+					{
+						if (Navigation.GetAspectRatio() == new Size(16, 9))
+						{
+							Navigation.SetCursor(1460 * Navigation.WindowSize.Width / 1600, 
+								360 * Navigation.WindowSize.Height / 900);
+							Navigation.Click();
+							Navigation.SystemWait(Navigation.Speed.Fastest);
+						}
+						else
+						{
+							Navigation.SetCursor(1170 * Navigation.WindowSize.Width / 1280, 
+								295 * Navigation.WindowSize.Height / 800);
+							Navigation.Click();
+							Navigation.SystemWait(Navigation.Speed.Fastest);
+						}
+						
+						Navigation.SetCursor(item.Center().X, item.Center().Y + offset);
+					}
+					
+					artifactIndex++;
+					if (artifactIndex >= artifactCount || StopScanning)
+					{
+						if (StopScanning) Logger.Info("Stopping artifact locking based on filtering");
+						else Logger.Info("Stopping artifact locking based on artifact count ({0} of {1})", artifactIndex, artifactCount);
+						return;
+					}
+				}
+
+				Logger.Debug("Finished locking page of artifacts. Scrolling...");
+
+				rowsQueued += rows;
+
+				// Page done, now scroll
+				// If the number of remaining scans is shorter than a full page then
+				// only scroll a few rows
+				if (totalRows - rowsQueued <= rows)
+				{
+					if (Navigation.GetAspectRatio() == new Size(8, 5))
+					{
+						offset = 35; // Lazy fix
+					}
+					for (int i = 0; i < 10 * ( totalRows - rowsQueued ) - 1; i++)
+					{
+						Navigation.sim.Mouse.VerticalScroll(-1);
+						Navigation.Wait(1);
+					}
+					Navigation.SystemWait(Navigation.Speed.Fast);
+				}
+				else
+				{
+					// Scroll back one to keep it from getting too crazy
+					if (rowsQueued % 15 == 0)
+					{
+						Navigation.sim.Mouse.VerticalScroll(1);
+					}
+					for (int i = 0; i < 10 * rows - 1; i++)
+					{
+						Navigation.sim.Mouse.VerticalScroll(-1);
+						Navigation.Wait(1);
+					}
+					Navigation.SystemWait(Navigation.Speed.Fast);
+				}
+				++page;
+				(rectangles, cols, rows) = GetPageOfItems(page);
+			}
+		}
+		
+		private static string CurrentSortingMethod()
         {
 			var region = new Rectangle(
 				x: (int)(140.0 / 1280.0 * Navigation.GetWidth()),
@@ -807,5 +959,5 @@ namespace InventoryKamera
         }
 
         #endregion Task Methods
-    }
+	}
 }

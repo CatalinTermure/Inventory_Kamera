@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace InventoryKamera
 {
@@ -147,6 +148,20 @@ namespace InventoryKamera
 				}
 				Navigation.MainMenuScreen();
 				Logger.Info("Done scanning artifacts");
+
+				if (Properties.Settings.Default.LockArtifacts)
+				{
+					Logger.Info("Locking artifacts...");
+					
+					// This is because ArtifactScraper.LockArtifacts() uses the already scanned artifacts and they need to be in the order they were scanned in
+					Inventory.Artifacts.Sort((a, b) => a.Id.CompareTo(b.Id));
+					
+					Navigation.InventoryScreen();
+					Navigation.SelectArtifactInventory();
+					ArtifactScraper.LockArtifacts(Inventory);
+					Navigation.MainMenuScreen();
+					Logger.Info("Done locking artifacts");
+				}
 			}
 
 			workerQueue.Enqueue(new OCRImageCollection(null, "END", 0));
