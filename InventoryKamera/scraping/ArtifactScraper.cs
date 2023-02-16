@@ -551,7 +551,8 @@ namespace InventoryKamera
 			}
 			if (!Properties.Settings.Default.EquipArtifacts) equippedCharacter = "";
 
-			return new Artifact(setName, rarity, level, gearSlot, mainStat, subStats.ToArray(), subStats.Count, equippedCharacter, id, _lock);
+			return new Artifact(setName, rarity, level, gearSlot, mainStat, subStats.ToArray(),
+				subStats.Count(stat => String.IsNullOrEmpty(stat.stat)), equippedCharacter, id, _lock);
 		}
 
 		private static int GetRarity(Bitmap bm)

@@ -98,7 +98,7 @@ namespace InventoryKamera
 		public bool HasValidSubStats()
 		{
 			bool valid = true;
-			for (int i = 0; i < SubStatsCount; i++)
+			for (int i = 0; i < SubStats.Length; i++)
 			{
 				if (!Scraper.IsValidStat(SubStats[i].stat) || SubStats[i].value == (decimal)( -1.0 ))
 				{
@@ -173,7 +173,7 @@ namespace InventoryKamera
 
 			for (int i = 0; i < SubStatsCount; i++)
 			{
-				if (!string.IsNullOrWhiteSpace(SubStats[i].stat)) output += $"Substat {i + 1}: {SubStats[i]}\n";
+				output += $"Substat {i + 1}: {SubStats[i]}\n";
 			}
 
 			output += $"Locked: {Lock}\n";
