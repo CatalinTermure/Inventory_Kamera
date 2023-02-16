@@ -107,6 +107,7 @@
             this.ScannerDelay_TrackBar = new System.Windows.Forms.TrackBar();
             this.label4 = new System.Windows.Forms.Label();
             this.wandererNameTextBox = new System.Windows.Forms.TextBox();
+            this.LockArtifacts_CheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.CharacterTalent3_PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharacterTalent2_PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CharacterTalent1_PictureBox)).BeginInit();
@@ -798,7 +799,7 @@
             this.EquipArtifactsCheckBox.Checked = global::InventoryKamera.Properties.Settings.Default.EquipArtifacts;
             this.EquipArtifactsCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.EquipArtifactsCheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::InventoryKamera.Properties.Settings.Default, "EquipArtifacts", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.EquipArtifactsCheckBox.Location = new System.Drawing.Point(328, 88);
+            this.EquipArtifactsCheckBox.Location = new System.Drawing.Point(256, 88);
             this.EquipArtifactsCheckBox.Name = "EquipArtifactsCheckBox";
             this.EquipArtifactsCheckBox.Size = new System.Drawing.Size(94, 17);
             this.EquipArtifactsCheckBox.TabIndex = 98;
@@ -1003,12 +1004,26 @@
             this.wandererNameTextBox.TabIndex = 105;
             this.wandererNameTextBox.Text = global::InventoryKamera.Properties.Settings.Default.WandererName;
             // 
+            // LockArtifacts_CheckBox
+            // 
+            this.LockArtifacts_CheckBox.AutoSize = true;
+            this.LockArtifacts_CheckBox.Checked = global::InventoryKamera.Properties.Settings.Default.LockArtifacts;
+            this.LockArtifacts_CheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.LockArtifacts_CheckBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::InventoryKamera.Properties.Settings.Default, "LockArtifacts", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.LockArtifacts_CheckBox.Location = new System.Drawing.Point(381, 88);
+            this.LockArtifacts_CheckBox.Name = "LockArtifacts_CheckBox";
+            this.LockArtifacts_CheckBox.Size = new System.Drawing.Size(90, 17);
+            this.LockArtifacts_CheckBox.TabIndex = 107;
+            this.LockArtifacts_CheckBox.Text = "Lock artifacts";
+            this.LockArtifacts_CheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
             this.ClientSize = new System.Drawing.Size(595, 519);
+            this.Controls.Add(this.LockArtifacts_CheckBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.wandererNameTextBox);
             this.Controls.Add(this.label1);
@@ -1172,6 +1187,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox wandererNameTextBox;
+        private System.Windows.Forms.CheckBox LockArtifacts_CheckBox;
     }
 }
 
