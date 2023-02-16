@@ -412,6 +412,7 @@ namespace InventoryKamera
 				int right  = (int)Math.Round(reference.Right  / 1280.0 * width, MidpointRounding.AwayFromZero);
 				int bottom = (int)Math.Round(reference.Bottom / 720.0 * height, MidpointRounding.AwayFromZero);
 
+				Navigation.SystemWait(Navigation.Speed.Fastest);
 				card = Navigation.CaptureRegion(new RECT(left, top, right, bottom));
 
 				equipped = card.Clone(new RECT(
@@ -429,6 +430,7 @@ namespace InventoryKamera
 				int right  = (int)Math.Round(reference.Right  / 1280.0 * width, MidpointRounding.AwayFromZero);
 				int bottom = (int)Math.Round(reference.Bottom / 800.0 * height, MidpointRounding.AwayFromZero);
 
+				Navigation.SystemWait(Navigation.Speed.Fastest);
 				card = Navigation.CaptureRegion(new RECT(left, top, right, bottom));
 
 				equipped = card.Clone(new RECT(
