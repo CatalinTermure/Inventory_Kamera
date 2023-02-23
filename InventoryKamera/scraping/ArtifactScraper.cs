@@ -238,16 +238,15 @@ namespace InventoryKamera
 							Navigation.SetCursor(1460 * Navigation.WindowSize.Width / 1600, 
 								360 * Navigation.WindowSize.Height / 900);
 							Navigation.Click();
-							Navigation.SystemWait(Navigation.Speed.Fastest);
 						}
 						else
 						{
 							Navigation.SetCursor(1170 * Navigation.WindowSize.Width / 1280, 
 								295 * Navigation.WindowSize.Height / 800);
 							Navigation.Click();
-							Navigation.SystemWait(Navigation.Speed.Fastest);
 						}
-						
+
+						Navigation.SystemWait(Navigation.Speed.Fast);
 						Navigation.SetCursor(item.Center().X, item.Center().Y + offset);
 					}
 					
